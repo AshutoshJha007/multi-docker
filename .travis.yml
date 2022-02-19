@@ -1,0 +1,20 @@
+sudo: required
+language: generic
+services:
+  - docker
+
+before_install:
+  - docker build -t ashutoshjhasap/react-test -f ./client.Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true ashutoshjhasap/react-test npm test
+
+after_success:
+  - docker build -t ashutoshjhasap/multi-client ./client
+  - docker build -t ashutoshjhasap/multi-nginx ./nginx
+  - docker build -t ashutoshjhasap/multi-worker ./server
+  - docker build -t ashutoshjhasap/multi-worker ./worker
+
+# log in to the docker CLI
+
+# Take those images to docker hub
